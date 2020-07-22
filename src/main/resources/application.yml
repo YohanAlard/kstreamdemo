@@ -1,0 +1,41 @@
+
+
+
+spring:
+  profiles:
+    active: dev
+
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: input
+        output:
+          destination: output
+      kafka:
+        streams:
+          binder:
+            applicationId: iconsumer
+            configuration:
+              commit.interval.ms: 100
+              default:
+                key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+            deserialization-exception-handler: sendtodlq
+          startOffset: earliest
+        binder:
+          brokers: localhost:9092
+
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+server:
+  port: 8080
